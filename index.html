@@ -5,19 +5,8 @@
     <meta charset="utf-8">
     <title>Tasty Mayo Yum!</title>
 
+    <script type="text/javascript" src="./mayolog.js"></script>
     <script type="text/javascript">
-      // ----------------------------------------------------
-      // YOUR CODE CAN GO HERE OR LOADED AS AN EXTERNAL FILE
-      // ----------------------------------------------------
-    </script>
-
-
-    <script type="text/javascript">
-      // Here is a quick way to load as many entries as you'd like into your log
-      // system. Simply call
-      //    loadSampleLogEntries(100)
-      // where the number of entries should be an integer representing the
-      // the number of log entries you'd like to  add.
       function loadSampleLogEntries(numberOfEntries){
         numberOfEntries = numberOfEntries || 1000;
         var oReq = new XMLHttpRequest();
@@ -33,13 +22,14 @@
                 data[words[Math.floor(Math.random()*words.length)]] = Math.random() > 0.5 ? Math.random() : words[Math.floor(Math.random()*words.length)];
               }
             }
-            // This will fail until you've implemented this object
             MayoLog.log(log.join(' '), data);
           }
         });
         oReq.open("GET", "https://gist.githubusercontent.com/banderson623/87f8c70cdc7ae900cd268299e4807c87/raw/f3412dcadb4ad69e664f7f8f26210589b86ea113/positive-words.txt");
         oReq.send();
       }
+
+      loadSampleLogEntries(5)
     </script>
   </head>
   <body></body>
