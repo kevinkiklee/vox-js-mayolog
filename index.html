@@ -27,6 +27,7 @@
             }
             MayoLog.log(log.join(' '), data);
           }
+
           MayoLog.toConsole();
           MayoLog.findWithDataAttribute(key);
           MayoLog.sendToServer('http://mayolog-app.herokuapp.com');
@@ -35,7 +36,6 @@
         oReq.send();
       }
 
-      loadSampleLogEntries(5)
     </script>
   </head>
   <body></body>
