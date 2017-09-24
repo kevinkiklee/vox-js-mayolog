@@ -18,11 +18,12 @@ class MayoLog {
   }
 
   toConsole() {
-    return this.mayolog.map(({ time, log, data }) => {
-      const logOutput = `(${time}ms) ${log} ${JSON.stringify(data)}`
-      console.log(logOutput)
-      return logOutput
-    });
+    const logOutput = this.mayolog.map(({ time, log, data }, index) => 
+      `${index + 1} - (${time}ms) ${log} ${JSON.stringify(data)}`
+    )
+
+    this._printToConsole(logOutput)
+    return logOutput
   }
 
   findWithDataAttribute(key) {
@@ -31,6 +32,11 @@ class MayoLog {
 
   sendToServer(url) {
 
+  }
+
+  _printToConsole(log) {
+    console.log('%c=-=-=-=-= maYOLOg =-=-=-=-=', 'color: cyan')
+    log.forEach(line => console.log(line))
   }
 }
 
