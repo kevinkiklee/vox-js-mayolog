@@ -9,9 +9,9 @@ class MayoLog {
     this.mayolog.push({ time, log, data })
   }
 
-  toConsole(log = this.mayolog) {
+  toConsole(log = this.mayolog, isSearch = false) {
     const logOutput = this._buildLogOutput(log)
-    this._printToConsole(logOutput)
+    this._printToConsole(logOutput, isSearch)
     return logOutput
   }
 
@@ -24,7 +24,7 @@ class MayoLog {
       }
     })
 
-    this.toConsole(foundEntries)
+    this.toConsole(foundEntries, true)
     return foundEntries
   }
 
@@ -38,8 +38,13 @@ class MayoLog {
     )
   }
 
-  _printToConsole(log) {
-    console.log('%c=-=-=-=-= maYOLOg =-=-=-=-=', 'color: cyan')
+  _printToConsole(log, isSearch) {
+    if (isSearch) {
+      console.log('%c=-=-=-=-= Search Result =-=-=-=-=', 'color: cyan')
+    } else {
+      console.log('%c=-=-=-=-= maYOLOg =-=-=-=-=', 'color: cyan')
+    }
+    
     log.forEach(line => console.log(line))
   }
 
@@ -70,7 +75,4 @@ class MayoLog {
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  MayoLog = new MayoLog()
-  loadSampleLogEntries(5)
-});
+module.exports = MayoLog
