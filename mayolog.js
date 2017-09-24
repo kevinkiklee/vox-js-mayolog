@@ -2,6 +2,7 @@ class MayoLog {
   constructor(startTime) {
     this.startTime = startTime
     this.mayolog = []
+
     this.log = this.log.bind(this)
     this.toConsole = this.toConsole.bind(this)
   }
@@ -17,8 +18,11 @@ class MayoLog {
   }
 
   toConsole() {
-    console.log(this.mayolog);
-    return this.mayolog
+    return this.mayolog.map(({ time, log, data }) => {
+      const logOutput = `(${time}ms) ${log} ${JSON.stringify(data)}`
+      console.log(logOutput)
+      return logOutput
+    });
   }
 
   findWithDataAttribute(key) {
