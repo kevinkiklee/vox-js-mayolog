@@ -6,7 +6,6 @@
     <title>Tasty Mayo Yum!</title>
 
     <script type="text/javascript" src="./mayolog.js"></script>
-
     <script type="text/javascript">
       function loadSampleLogEntries(numberOfEntries){
         numberOfEntries = numberOfEntries || 1000;
@@ -35,7 +34,12 @@
         oReq.open("GET", "https://gist.githubusercontent.com/banderson623/87f8c70cdc7ae900cd268299e4807c87/raw/f3412dcadb4ad69e664f7f8f26210589b86ea113/positive-words.txt");
         oReq.send();
       }
-
+    </script>
+    <script type="text/javascript">
+      document.addEventListener('DOMContentLoaded', () => {
+        MayoLog = new MayoLog()
+        loadSampleLogEntries(5)
+      });
     </script>
   </head>
   <body></body>
