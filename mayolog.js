@@ -40,11 +40,11 @@ class MayoLog {
 
   _printToConsole(log, isSearch) {
     if (isSearch) {
-      console.log('%c=-=-=-=-= Search Result =-=-=-=-=', 'color: cyan')
+      console.log('%c=-=-=- Search Result -=-=-=', 'color: cyan')
     } else {
       console.log('%c=-=-=-=-= maYOLOg =-=-=-=-=', 'color: cyan')
     }
-    
+
     log.forEach(line => console.log(line))
   }
 
@@ -54,7 +54,7 @@ class MayoLog {
     }
 
     const keys = Object.keys(object)
-
+    
     if (keys.includes(key)) {
       return true
     } else {
@@ -66,7 +66,7 @@ class MayoLog {
         }
       })
 
-      for (const child in children) {
+      for (const child of children) {
         return this._hasKey(child, key)
       }
     }
