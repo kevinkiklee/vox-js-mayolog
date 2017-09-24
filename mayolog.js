@@ -9,17 +9,12 @@ class MayoLog {
 
   log(log, data) {
     const time = new Date() - this.startTime
-
-    this.mayolog.push({
-      time,
-      log,
-      data,
-    })
+    this.mayolog.push({ time, log, data })
   }
 
   toConsole() {
     const logOutput = this.mayolog.map(({ time, log, data }, index) => 
-      `${index + 1} - (${time}ms) ${log} ${JSON.stringify(data)}`
+      `[${index + 1}] (${time}ms) ${log} ${JSON.stringify(data)}`
     )
 
     this._printToConsole(logOutput)
