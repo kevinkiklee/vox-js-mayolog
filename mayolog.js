@@ -1,10 +1,7 @@
 class MayoLog {
-  constructor(startTime) {
-    this.startTime = startTime
+  constructor() {
+    this.startTime = new Date();
     this.mayolog = []
-
-    this.log = this.log.bind(this)
-    this.toConsole = this.toConsole.bind(this)
   }
 
   log(log, data) {
@@ -12,29 +9,33 @@ class MayoLog {
     this.mayolog.push({ time, log, data })
   }
 
-  toConsole() {
-    const logOutput = this.mayolog.map(({ time, log, data }, index) => 
-      `[${index + 1}] (${time}ms) ${log} ${JSON.stringify(data)}`
-    )
-
+  toConsole(log = this.mayolog) {
+    const logOutput = this._buildLogOutput(log)
     this._printToConsole(logOutput)
     return logOutput
   }
 
   findWithDataAttribute(key) {
-    const found = []
+    const foundEntries = []
 
     this.mayolog.forEach(logEntry => {
-      if (this._deepSearch(logEntry.data, key)) {
-        found.push(logEntry)
+      if (this._hasKey(logEntry.data, key)) {
+        foundEntries.push(logEntry)
       }
     })
 
-    return found
+    this.toConsole(foundEntries)
+    return foundEntries
   }
 
   sendToServer(url) {
 
+  }
+
+  _buildLogOutput(log) {
+    return log.map(({ time, log, data }, index) => 
+      `[${index + 1}] (${time}ms) ${log} ${JSON.stringify(data)}`
+    )
   }
 
   _printToConsole(log) {
@@ -42,12 +43,34 @@ class MayoLog {
     log.forEach(line => console.log(line))
   }
 
-  _deepSearch(object, key) {
+  _hasKey(object, key) {
+    if (object.length === 0) {
+      return false
+    }
+
+    const keys = Object.keys(object)
+
+    if (keys.includes(key)) {
+      return true
+    } else {
+      const children = []
+
+      keys.forEach(key => {
+        if (typeof object[key] === 'object') {
+          children.push(object[key])
+        }
+      })
+
+      for (const child in children) {
+        return this._hasKey(child, key)
+      }
+    }
     
+    return false
   }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const startTime = new Date();
-  MayoLog = new MayoLog(startTime);
+  MayoLog = new MayoLog()
+  loadSampleLogEntries(5)
 });
