@@ -22,7 +22,15 @@ class MayoLog {
   }
 
   findWithDataAttribute(key) {
-    
+    const found = []
+
+    this.mayolog.forEach(logEntry => {
+      if (this._deepSearch(logEntry.data, key)) {
+        found.push(logEntry)
+      }
+    })
+
+    return found
   }
 
   sendToServer(url) {
@@ -32,6 +40,10 @@ class MayoLog {
   _printToConsole(log) {
     console.log('%c=-=-=-=-= maYOLOg =-=-=-=-=', 'color: cyan')
     log.forEach(line => console.log(line))
+  }
+
+  _deepSearch(object, key) {
+    
   }
 }
 
