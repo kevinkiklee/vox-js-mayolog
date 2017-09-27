@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import chancify from 'chancify'
-import hasKey from './hasKeyUtil'
+import hasKey from './util/hasKey'
 
 class Logger {
   constructor() {
