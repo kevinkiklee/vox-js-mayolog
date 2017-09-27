@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import chancify from 'chancify'
 import hasKey from './util/hasKey'
-import sendLog from './util/sendLog'
+import makeXHR from './util/makeXHR'
 
 class Logger {
   constructor() {
@@ -9,7 +9,7 @@ class Logger {
     this.mayolog = []
   }
 
-  log(log, data) {
+  log(log = 'Unknown action', data = {}) {
     const time = new Date() - this.startTime
     this.mayolog.push({ time, log, data })
   }
@@ -20,7 +20,7 @@ class Logger {
     return logOutput
   }
 
-  findWithDataAttribute(key) {
+  findWithDataAttribute(key = '') {
     const foundEntries = []
 
     this.mayolog.forEach(logEntry => {
@@ -34,8 +34,16 @@ class Logger {
   }
 
   sendToServer(url) {
-    const send = chancify(sendLog, 0.5)
-    send(url, this.mayolog)
+    const sendLog = chancify(makeXHR, 0.5)
+
+    const params = {
+      type: 'POST',
+      url,
+      data: this.mayolog,
+      callback: () => this.colorPrint('=-=-=- Log Submitted -=-=-=', 'lightgreen'),
+    }
+
+    sendLog(params)
   }
 
   buildLogOutput(rawLog) {
@@ -45,12 +53,16 @@ class Logger {
 
   printToConsole(log, isSearch) {
     if (isSearch) {
-      console.log('%c=-=-=- Search Result -=-=-=', 'color: cyan')
+      this.colorPrint('=-=-=- Search Result -=-=-=')
     } else {
-      console.log('%c=-=-=-=-= maYOLOg =-=-=-=-=', 'color: cyan')
+      this.colorPrint('=-=-=-=-= maYOLOg =-=-=-=-=')
     }
 
     log.forEach(line => console.log(line))
+  }
+
+  colorPrint(text = '', color = 'cyan') {
+    console.log(`%c${text}`, `color: ${color}`)
   }
 }
 
