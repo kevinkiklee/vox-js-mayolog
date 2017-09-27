@@ -2,7 +2,7 @@
   "name": "mayolog",
   "version": "0.0.1-beta",
   "scripts": {
-    "build": "npm run build",
+    "build": "webpack",
     "watch": "webpack -w",
     "test": "babel-tape-runner test/*-test.js | faucet"
   },
@@ -12,9 +12,7 @@
     "eslint-config-airbnb-base": "^12.0.0",
     "eslint-plugin-import": "^2.7.0",
     "faucet": "^0.0.1",
-    "tape": "^4.8.0"
-  },
-  "dependencies": {
+    "tape": "^4.8.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.0",
