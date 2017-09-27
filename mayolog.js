@@ -1,6 +1,6 @@
 class MayoLog {
   constructor() {
-    this.startTime = new Date();
+    this.startTime = new Date()
     this.mayolog = []
   }
 
@@ -29,7 +29,12 @@ class MayoLog {
   }
 
   sendToServer(url) {
+    const _sendLog = () => {
+      console.log(url);
+    }
 
+    const sendLog = this._chancify(_sendLog, .5)
+    sendLog()
   }
 
   _buildLogOutput(log) {
@@ -72,6 +77,18 @@ class MayoLog {
     }
     
     return false
+  }
+
+  _chancify(fn, percentChance) {
+    const chancified = (...args) => {
+      const shouldRunFn = Math.random() <= percentChance;
+  
+      if (shouldRunFn) {
+        fn(...args);
+      }
+    }
+    
+    return chancified;
   }
 }
 
