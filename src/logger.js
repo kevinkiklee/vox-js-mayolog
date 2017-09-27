@@ -1,3 +1,6 @@
+/* eslint-disable no-console */
+import hasKey from './hasKeyUtil'
+
 class Logger {
   constructor() {
     this.startTime = new Date()
@@ -10,8 +13,8 @@ class Logger {
   }
 
   toConsole(log = this.mayolog, isSearch = false) {
-    const logOutput = this._buildLogOutput(log)
-    this._printToConsole(logOutput, isSearch)
+    const logOutput = this.buildLogOutput(log)
+    this.printToConsole(logOutput, isSearch)
     return logOutput
   }
 
@@ -19,7 +22,7 @@ class Logger {
     const foundEntries = []
 
     this.mayolog.forEach(logEntry => {
-      if (this._hasKey(logEntry.data, key)) {
+      if (hasKey(logEntry.data, key)) {
         foundEntries.push(logEntry)
       }
     })
@@ -29,21 +32,20 @@ class Logger {
   }
 
   sendToServer(url) {
-    const _sendLog = () => {
+    const transmitLog = () => {
       console.log(url);
     }
 
-    const sendLog = this._chancify(_sendLog, .5)
+    const sendLog = this.chancify(transmitLog, 0.5)
     sendLog()
   }
 
-  _buildLogOutput(log) {
-    return log.map(({ time, log, data }, index) => 
-      `[${index + 1}] (${time}ms) ${log} ${JSON.stringify(data)}`
-    )
+  buildLogOutput(rawLog) {
+    return rawLog.map(({ time, log, data }, index) =>
+      `[${index + 1}] (${time}ms) ${log} ${JSON.stringify(data)}`)
   }
 
-  _printToConsole(log, isSearch) {
+  printToConsole(log, isSearch) {
     if (isSearch) {
       console.log('%c=-=-=- Search Result -=-=-=', 'color: cyan')
     } else {
@@ -53,41 +55,15 @@ class Logger {
     log.forEach(line => console.log(line))
   }
 
-  _hasKey(object, key) {
-    if (object.length === 0) {
-      return false
-    }
-
-    const keys = Object.keys(object)
-    
-    if (keys.includes(key)) {
-      return true
-    } else {
-      const children = []
-
-      keys.forEach(key => {
-        if (typeof object[key] === 'object') {
-          children.push(object[key])
-        }
-      })
-
-      for (const child of children) {
-        return this._hasKey(child, key)
-      }
-    }
-    
-    return false
-  }
-
-  _chancify(fn, percentChance) {
+  chancify(fn, percentChance) {
     const chancified = (...args) => {
       const shouldRunFn = Math.random() <= percentChance
-  
+
       if (shouldRunFn) {
         fn(...args)
       }
     }
-    
+
     return chancified
   }
 }
