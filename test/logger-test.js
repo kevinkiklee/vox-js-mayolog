@@ -43,16 +43,22 @@ test('Outputs to console', t => {
   t.end()
 })
 
-test('Returns a log object', t => {
+test('Returns a log output', t => {
   const actualOutput = Log.toConsole()
   t.isEqual(actualOutput.length, 2)
   t.end()
 })
 
-test('Finds the key in an object', t => {
+test('Finds the key in the object', t => {
   const found = Log.findWithDataAttribute('keyA')
   t.isEqual(found.length, 1)
   t.isEqual(found[0].log, 'Log - A')
+  t.end()
+})
+
+test('Returns an empty array if the key is not found in the object', t => {
+  const found = Log.findWithDataAttribute('keyX')
+  t.isEqual(found.length, 0)
   t.end()
 })
 
@@ -62,14 +68,14 @@ test('Finds all entries with the key', t => {
   t.end()
 })
 
-test('Finds the nested key in an object', t => {
+test('Finds the nested key in the object', t => {
   const found = Log.findWithDataAttribute('nestedKey')
   t.isEqual(found.length, 1)
   t.isEqual(found[0].log, 'Log - B')
   t.end()
 })
 
-test('Finds deeply nested key in an object', t => {
+test('Finds deeply nested key in the object', t => {
   const found = Log.findWithDataAttribute('deepNestedKey')
   t.isEqual(found.length, 1)
   t.isEqual(found[0].log, 'Log - B')
