@@ -4,13 +4,14 @@
   "scripts": {
     "build": "npm run build",
     "watch": "webpack -w",
-    "test": "babel-tape-runner test/*-test.js"
+    "test": "babel-tape-runner test/*-test.js | faucet"
   },
   "devDependencies": {
     "babel-tape-runner": "^2.0.1",
     "eslint-config-airbnb": "^15.1.0",
     "eslint-config-airbnb-base": "^12.0.0",
     "eslint-plugin-import": "^2.7.0",
+    "faucet": "^0.0.1",
     "tape": "^4.8.0"
   },
   "dependencies": {
