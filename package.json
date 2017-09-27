@@ -18,5 +18,8 @@
     "faucet": "^0.0.1",
     "tape": "^4.8.0",
     "webpack": "^3.6.0"
+  },
+  "dependencies": {
+    "chancify": "^1.1.0"
   }
 }

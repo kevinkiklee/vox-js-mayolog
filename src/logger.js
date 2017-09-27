@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+import chancify from 'chancify'
 import hasKey from './hasKeyUtil'
 
 class Logger {
@@ -36,8 +37,8 @@ class Logger {
       console.log(url);
     }
 
-    const sendLog = this.chancify(transmitLog, 0.5)
-    sendLog()
+    const send = chancify(transmitLog, 0.5)
+    send()
   }
 
   buildLogOutput(rawLog) {
@@ -53,18 +54,6 @@ class Logger {
     }
 
     log.forEach(line => console.log(line))
-  }
-
-  chancify(fn, percentChance) {
-    const chancified = (...args) => {
-      const shouldRunFn = Math.random() <= percentChance
-
-      if (shouldRunFn) {
-        fn(...args)
-      }
-    }
-
-    return chancified
   }
 }
 
