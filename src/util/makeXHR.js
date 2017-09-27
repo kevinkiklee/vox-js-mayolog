@@ -12,7 +12,7 @@ const makeXHR = (params = {}) => {
     url,
     data,
     callback,
-  } = Object.assign({}, defaults, params)
+  } = { ...defaults, ...params }
 
   const xhr = new XMLHttpRequest()
   xhr.open(type, url, true)
