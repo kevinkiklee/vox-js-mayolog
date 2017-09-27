@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import chancify from 'chancify'
 import hasKey from './util/hasKey'
+import sendLog from './util/sendLog'
 
 class Logger {
   constructor() {
@@ -33,12 +34,8 @@ class Logger {
   }
 
   sendToServer(url) {
-    const transmitLog = () => {
-      console.log(url);
-    }
-
-    const send = chancify(transmitLog, 0.5)
-    send()
+    const send = chancify(sendLog, 0.5)
+    send(url, this.mayolog)
   }
 
   buildLogOutput(rawLog) {
