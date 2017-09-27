@@ -6,31 +6,31 @@ import makeXHR from './util/makeXHR'
 class Logger {
   constructor() {
     this.startTime = new Date()
-    this.mayolog = []
+    this.logEntries = []
   }
 
-  log(log = 'Unknown action', data = {}) {
+  log(log = 'Unknown entry', data = {}) {
     const time = new Date() - this.startTime
-    this.mayolog.push({ time, log, data })
+    this.logEntries.push({ time, log, data })
   }
 
-  toConsole(log = this.mayolog, isSearch = false) {
-    const logOutput = this.buildLogOutput(log)
+  toConsole(logEntries = this.logEntries, isSearch = false) {
+    const logOutput = this.buildLogOutput(logEntries)
     this.printToConsole(logOutput, isSearch)
     return logOutput
   }
 
   findWithDataAttribute(key = '') {
-    const foundEntries = []
+    const logEntries = []
 
-    this.mayolog.forEach(logEntry => {
+    this.logEntries.forEach(logEntry => {
       if (hasKey(logEntry.data, key)) {
-        foundEntries.push(logEntry)
+        logEntries.push(logEntry)
       }
     })
 
-    this.toConsole(foundEntries, true)
-    return foundEntries
+    this.toConsole(logEntries, true)
+    return logEntries
   }
 
   sendToServer(url) {
@@ -39,26 +39,26 @@ class Logger {
     const params = {
       type: 'POST',
       url,
-      data: this.mayolog,
+      data: this.logEntries,
       callback: () => this.colorPrint('=-=-=- Log Submitted -=-=-=', 'lightgreen'),
     }
 
     sendLog(params)
   }
 
-  buildLogOutput(rawLog) {
-    return rawLog.map(({ time, log, data }, index) =>
+  buildLogOutput(logEntries = []) {
+    return logEntries.map(({ time, log, data }, index) =>
       `[${index + 1}] (${time}ms) ${log} ${JSON.stringify(data)}`)
   }
 
-  printToConsole(log, isSearch) {
+  printToConsole(logOutput = [], isSearch = false) {
     if (isSearch) {
       this.colorPrint('=-=-=- Search Result -=-=-=')
     } else {
-      this.colorPrint('=-=-=-=-= maYOLOg =-=-=-=-=')
+      this.colorPrint('=-=-=-=-= Logger! =-=-=-=-=')
     }
 
-    log.forEach(line => console.log(line))
+    logOutput.forEach(line => console.log(line))
   }
 
   colorPrint(text = '', color = 'cyan') {

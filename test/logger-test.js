@@ -4,26 +4,26 @@ import Logger from '../src/logger'
 const Log = new Logger()
 const startTime = new Date()
 
-const logA = { 
-  log: 'Log - A', 
-  data: { 
-    'key': 'value', 
-    'keyA': 'value', 
-  }
+const logA = {
+  log: 'Log - A',
+  data: {
+    key: 'value',
+    keyA: 'value',
+  },
 }
 
-const logB = { 
-  log: 'Log - B', 
-  data: { 
-    'key': 'value', 
-    'keyB': 'value',
-    'nestedObject': { 
-      'nestedKey': 'nestedValue', 
-      'deepNestedObject': {
-        'deepNestedKey': 'deepNestedValue',
-      }
-    } 
-  }
+const logB = {
+  log: 'Log - B',
+  data: {
+    key: 'value',
+    keyB: 'value',
+    nestedObject: {
+      nestedKey: 'nestedValue',
+      deepNestedObject: {
+        deepNestedKey: 'deepNestedValue',
+      },
+    },
+  },
 }
 
 Log.log(logA.log, logA.data)

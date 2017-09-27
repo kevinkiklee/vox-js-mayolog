@@ -1,5 +1,5 @@
 /* eslint-disable no-undef, no-console */
-const makeXHR = params => {
+const makeXHR = (params = {}) => {
   const defaults = {
     type: 'GET',
     url: 'http://httbin.org/get',
