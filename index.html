@@ -29,7 +29,7 @@
 
           MayoLog.toConsole();
           MayoLog.findWithDataAttribute(key);
-          MayoLog.sendToServer('http://mayolog-app.herokuapp.com');
+          MayoLog.sendToServer('http://httpbin.org/post');
         });
         oReq.open("GET", "https://gist.githubusercontent.com/banderson623/87f8c70cdc7ae900cd268299e4807c87/raw/f3412dcadb4ad69e664f7f8f26210589b86ea113/positive-words.txt");
         oReq.send();
