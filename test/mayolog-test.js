@@ -1,5 +1,5 @@
 const test = require('tape')
-const MayoLog = require('./mayolog')
+const MayoLog = require('../src/logger')
 
 const Log = new MayoLog()
 const startTime = new Date()

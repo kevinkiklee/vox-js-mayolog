@@ -1,4 +1,4 @@
-class MayoLog {
+class Logger {
   constructor() {
     this.startTime = new Date()
     this.mayolog = []
@@ -81,15 +81,15 @@ class MayoLog {
 
   _chancify(fn, percentChance) {
     const chancified = (...args) => {
-      const shouldRunFn = Math.random() <= percentChance;
+      const shouldRunFn = Math.random() <= percentChance
   
       if (shouldRunFn) {
-        fn(...args);
+        fn(...args)
       }
     }
     
-    return chancified;
+    return chancified
   }
 }
 
-module.exports = MayoLog
+export default Logger
