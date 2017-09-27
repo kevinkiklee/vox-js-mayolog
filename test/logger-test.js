@@ -1,7 +1,7 @@
-const test = require('tape')
-const MayoLog = require('../src/logger')
+import test from 'tape'
+import Logger from '../src/logger'
 
-const Log = new MayoLog()
+const Log = new Logger()
 const startTime = new Date()
 
 const logA = { 
