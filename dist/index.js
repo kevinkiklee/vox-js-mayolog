@@ -123,15 +123,15 @@ Object.defineProperty(exports, "__esModule", {
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /* eslint-disable no-console */
 
 
-var _chancify = __webpack_require__(3);
+var _chancify = __webpack_require__(2);
 
 var _chancify2 = _interopRequireDefault(_chancify);
 
-var _hasKey = __webpack_require__(4);
+var _hasKey = __webpack_require__(3);
 
 var _hasKey2 = _interopRequireDefault(_hasKey);
 
-var _makeXHR = __webpack_require__(7);
+var _makeXHR = __webpack_require__(4);
 
 var _makeXHR2 = _interopRequireDefault(_makeXHR);
 
@@ -155,83 +155,83 @@ var Logger = function () {
       var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
       var time = new Date() - this.startTime;
-      this.logEntries.push({ time: time, log: _log, data: data });
+      var logEntry = { time: time, log: _log, data: data };
+
+      this.logEntries.push(logEntry);
+      return logEntry;
     }
   }, {
     key: 'toConsole',
     value: function toConsole() {
       var logEntries = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.logEntries;
-      var isSearch = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
-      var logOutput = this.buildLogOutput(logEntries);
-      this.printToConsole(logOutput, isSearch);
-      return logOutput;
+      var parsedLogEntries = this.parseLogEntries(logEntries);
+
+      this.printHeader('=-=-=-=-= Logger! =-=-=-=-=');
+      this.printToConsole(parsedLogEntries);
+      return parsedLogEntries;
     }
   }, {
     key: 'findWithDataAttribute',
     value: function findWithDataAttribute() {
       var key = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
 
-      var logEntries = [];
-
-      this.logEntries.forEach(function (logEntry) {
-        if ((0, _hasKey2.default)(logEntry.data, key)) {
-          logEntries.push(logEntry);
-        }
+      var filteredEntries = this.logEntries.filter(function (_ref) {
+        var data = _ref.data;
+        return (0, _hasKey2.default)(data, key);
       });
+      var parsedLogEntries = this.parseLogEntries(filteredEntries);
 
-      this.toConsole(logEntries, true);
-      return logEntries;
+      this.printHeader('=-=-=- Search Result -=-=-=');
+      this.printToConsole(parsedLogEntries);
+      return filteredEntries;
     }
   }, {
     key: 'sendToServer',
-    value: function sendToServer(url) {
+    value: function sendToServer() {
       var _this = this;
 
-      var sendLog = (0, _chancify2.default)(_makeXHR2.default, 0.5);
+      var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
 
-      var params = {
+      var sendLog = (0, _chancify2.default)(_makeXHR2.default, 0.5);
+      var options = {
         type: 'POST',
         url: url,
         data: this.logEntries,
-        callback: function callback() {
-          return _this.colorPrint('=-=-=- Log Submitted -=-=-=', 'lightgreen');
+        success: function success() {
+          return _this.printHeader('=-=-=- Log Submitted -=-=-=', 'lightgreen');
+        },
+        error: function error() {
+          return _this.printHeader('=-=-=- Submit Failed -=-=-=', 'red');
         }
       };
 
-      sendLog(params);
+      sendLog(options);
     }
   }, {
-    key: 'buildLogOutput',
-    value: function buildLogOutput() {
+    key: 'parseLogEntries',
+    value: function parseLogEntries() {
       var logEntries = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
 
-      return logEntries.map(function (_ref, index) {
-        var time = _ref.time,
-            log = _ref.log,
-            data = _ref.data;
+      return logEntries.map(function (_ref2, index) {
+        var time = _ref2.time,
+            log = _ref2.log,
+            data = _ref2.data;
         return '[' + (index + 1) + '] (' + time + 'ms) ' + log + ' ' + JSON.stringify(data);
       });
     }
   }, {
     key: 'printToConsole',
     value: function printToConsole() {
-      var logOutput = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-      var isSearch = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+      var parsedLogEntries = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
 
-      if (isSearch) {
-        this.colorPrint('=-=-=- Search Result -=-=-=');
-      } else {
-        this.colorPrint('=-=-=-=-= Logger! =-=-=-=-=');
-      }
-
-      logOutput.forEach(function (line) {
-        return console.log(line);
+      parsedLogEntries.forEach(function (logEntry) {
+        return console.log(logEntry);
       });
     }
   }, {
-    key: 'colorPrint',
-    value: function colorPrint() {
+    key: 'printHeader',
+    value: function printHeader() {
       var text = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
       var color = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'cyan';
 
@@ -245,8 +245,7 @@ var Logger = function () {
 exports.default = Logger;
 
 /***/ }),
-/* 2 */,
-/* 3 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -254,7 +253,7 @@ function chancify(n,c){return function(){Math.random()<=c&&n.apply(void 0,argume
 
 
 /***/ }),
-/* 4 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -277,13 +276,13 @@ var hasKey = function hasKey(object, targetKey) {
     return true;
   }
 
-  var children = [];
-
-  keys.forEach(function (key) {
+  var children = keys.reduce(function (objects, key) {
     if (_typeof(object[key]) === 'object') {
-      children.push(object[key]);
+      objects.push(object[key]);
     }
-  });
+
+    return objects;
+  }, []);
 
   var _iteratorNormalCompletion = true;
   var _didIteratorError = false;
@@ -293,7 +292,9 @@ var hasKey = function hasKey(object, targetKey) {
     for (var _iterator = children[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
       var child = _step.value;
 
-      return hasKey(child, targetKey);
+      if (hasKey(child, targetKey)) {
+        return true;
+      }
     }
   } catch (err) {
     _didIteratorError = true;
@@ -316,9 +317,7 @@ var hasKey = function hasKey(object, targetKey) {
 exports.default = hasKey;
 
 /***/ }),
-/* 5 */,
-/* 6 */,
-/* 7 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -327,29 +326,38 @@ exports.default = hasKey;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 /* eslint-disable no-undef, no-console */
 var makeXHR = function makeXHR() {
-  var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
   var defaults = {
     type: 'GET',
     url: 'http://httbin.org/get',
     data: {},
-    callback: function callback() {}
+    success: function success() {},
+    error: function error() {}
   };
 
-  var _Object$assign = Object.assign({}, defaults, params),
-      type = _Object$assign.type,
-      url = _Object$assign.url,
-      data = _Object$assign.data,
-      callback = _Object$assign.callback;
+  var _defaults$options = _extends({}, defaults, options),
+      type = _defaults$options.type,
+      url = _defaults$options.url,
+      data = _defaults$options.data,
+      success = _defaults$options.success,
+      error = _defaults$options.error;
 
   var xhr = new XMLHttpRequest();
   xhr.open(type, url, true);
 
   xhr.onreadystatechange = function () {
-    if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-      callback();
+    if (xhr.readyState === XMLHttpRequest.DONE) {
+      if (xhr.status === 200) {
+        success();
+      } else {
+        error();
+      }
     }
   };
 
