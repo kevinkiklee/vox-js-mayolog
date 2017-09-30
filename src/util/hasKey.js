@@ -9,16 +9,17 @@ const hasKey = (object, targetKey) => {
     return true
   }
 
-  const children = []
-
-  keys.forEach(key => {
+  const children = keys.reduce((objects, key) => {
     if (typeof object[key] === 'object') {
-      children.push(object[key])
+      objects.push(object[key])
     }
-  })
+    return objects
+  }, [])
 
   for (const child of children) {
-    return hasKey(child, targetKey)
+    if (hasKey(child, targetKey)) {
+      return true
+    }
   }
 
   return false

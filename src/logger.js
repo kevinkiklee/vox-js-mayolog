@@ -9,60 +9,57 @@ class Logger {
     this.logEntries = []
   }
 
-  log(log = 'Unknown entry', data = {}) {
+  log(log = 'Unknown entry', data) {
     const time = new Date() - this.startTime
-    this.logEntries.push({ time, log, data })
+    const logEntry = { time, log, data }
+
+    return this.logEntries.push(logEntry)
   }
 
-  toConsole(logEntries = this.logEntries, isSearch = false) {
-    const logOutput = this.buildLogOutput(logEntries)
-    this.printToConsole(logOutput, isSearch)
-    return logOutput
+  toConsole(logEntries = this.logEntries) {
+    return this.printToConsole('=-=-=-=-= Logger! =-=-=-=-=', logEntries)
   }
 
-  findWithDataAttribute(key = '') {
-    const logEntries = []
+  findWithDataAttribute(key) {
+    const filteredLogEntries = this.logEntries.filter(({ data }) => hasKey(data, key))
 
-    this.logEntries.forEach(logEntry => {
-      if (hasKey(logEntry.data, key)) {
-        logEntries.push(logEntry)
-      }
-    })
-
-    this.toConsole(logEntries, true)
-    return logEntries
+    this.printToConsole('=-=-=- Search Result -=-=-=', filteredLogEntries)
+    return filteredLogEntries
   }
 
   sendToServer(url) {
     const sendLog = chancify(makeXHR, 0.5)
-
-    const params = {
+    const options = {
       type: 'POST',
       url,
       data: this.logEntries,
-      callback: () => this.colorPrint('=-=-=- Log Submitted -=-=-=', 'lightgreen'),
+      success: () => this.printHeading('=-=-=- Log Submitted -=-=-=', 'lightgreen'),
+      error: () => this.printHeading('=-=-=- Submit Failed -=-=-=', 'red'),
     }
 
-    sendLog(params)
+    sendLog(options)
   }
 
-  buildLogOutput(logEntries = []) {
+  printToConsole(heading, logEntries) {
+    const parsedLogEntries = this.parseLogEntries(logEntries)
+
+    this.printHeading(heading)
+    this.printLogEntries(parsedLogEntries)
+
+    return parsedLogEntries
+  }
+
+  parseLogEntries(logEntries) {
     return logEntries.map(({ time, log, data }, index) =>
       `[${index + 1}] (${time}ms) ${log} ${JSON.stringify(data)}`)
   }
 
-  printToConsole(logOutput = [], isSearch = false) {
-    if (isSearch) {
-      this.colorPrint('=-=-=- Search Result -=-=-=')
-    } else {
-      this.colorPrint('=-=-=-=-= Logger! =-=-=-=-=')
-    }
-
-    logOutput.forEach(line => console.log(line))
+  printHeading(text, color = 'cyan') {
+    console.log(`%c${text}`, `color: ${color}`)
   }
 
-  colorPrint(text = '', color = 'cyan') {
-    console.log(`%c${text}`, `color: ${color}`)
+  printLogEntries(parsedLogEntries) {
+    parsedLogEntries.forEach(logEntry => console.log(logEntry))
   }
 }
 
