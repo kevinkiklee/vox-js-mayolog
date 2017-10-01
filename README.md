@@ -1,3 +1,5 @@
+![Screenshot](/docs/screenshot.png)
+
 # maYOLOg
 maYOLOg is a demo application that utilizes `Logger` which records events, prints to console, searches by key, and submits the log to a server.
 
