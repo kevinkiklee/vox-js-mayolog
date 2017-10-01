@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 const parseLogEntries = logEntries => (
-  logEntries.map(({ time, log, data }, index) =>
-    `[${index + 1}] (${time}ms) ${log} ${JSON.stringify(data)}`)
+  logEntries.map(({ time, event, data }, index) =>
+    `[${index + 1}] (${time}ms) ${event} ${JSON.stringify(data)}`)
 )
 
 const printHeading = (text, color = 'cyan') => {

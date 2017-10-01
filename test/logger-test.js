@@ -6,7 +6,7 @@ const Log = new Logger()
 const startTime = new Date()
 
 const logA = {
-  log: 'Log - A',
+  event: 'Log - A',
   data: {
     key: 'value',
     keyA: 'value',
@@ -14,7 +14,7 @@ const logA = {
 }
 
 const logB = {
-  log: 'Log - B',
+  event: 'Log - B',
   data: {
     key: 'value',
     keyB: 'value',
@@ -38,19 +38,19 @@ test('Logger object records the start time', t => {
 })
 
 test('log() records the entry', t => {
-  Log.log(logA.log, logA.data)
-  Log.log(logB.log, logB.data)
+  Log.log(logA.event, logA.data)
+  Log.log(logB.event, logB.data)
   t.isEqual(Log.logEntries.length, 2)
   t.end()
 })
 
-test('log() records the time of log entry', t => {
+test('log() records the time of the entry', t => {
   t.isEqual(typeof Log.logEntries[0].time, 'number')
   t.end()
 })
 
-test('log() records the log of the entry', t => {
-  t.isEqual(typeof Log.logEntries[0].log, 'string')
+test('log() records the event of the entry', t => {
+  t.isEqual(typeof Log.logEntries[0].event, 'string')
   t.end()
 })
 test('log() records the data of the entry', t => {
@@ -67,7 +67,7 @@ test('toConsole() returns an array of the output', t => {
 test('findWithDataAttribute() finds the key in the object', t => {
   const found = Log.findWithDataAttribute('keyA')
   t.isEqual(found.length, 1)
-  t.isEqual(found[0].log, 'Log - A')
+  t.isEqual(found[0].event, 'Log - A')
   t.end()
 })
 
@@ -86,13 +86,13 @@ test('findWithDataAttribute() finds all entries with the key', t => {
 test('findWithDataAttribute() finds the nested key in the object', t => {
   const found = Log.findWithDataAttribute('nestedKey')
   t.isEqual(found.length, 1)
-  t.isEqual(found[0].log, 'Log - B')
+  t.isEqual(found[0].event, 'Log - B')
   t.end()
 })
 
 test('findWithDataAttribute() finds deeply nested key in the object', t => {
   const found = Log.findWithDataAttribute('deepNestedKey')
   t.isEqual(found.length, 1)
-  t.isEqual(found[0].log, 'Log - B')
+  t.isEqual(found[0].event, 'Log - B')
   t.end()
 })

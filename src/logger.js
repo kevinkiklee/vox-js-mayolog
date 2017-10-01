@@ -10,9 +10,9 @@ class Logger {
     this.logEntries = []
   }
 
-  log(log = 'Unknown entry', data) {
+  log(event, data) {
     const time = new Date() - this.startTime
-    const logEntry = { time, log, data }
+    const logEntry = { time, event, data }
 
     return this.logEntries.push(logEntry)
   }
