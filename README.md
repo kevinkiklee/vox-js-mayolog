@@ -20,6 +20,8 @@ maYOLOg is a demo application that utilizes `Logger` which records events, print
     ```
     npm run test
     ```
+  Open `index.html` to run it locally, or you can visit the [Live Demo](http://kevinkiklee.com/vox-js-mayolog/) page and open the developer tools.
+
 
 ## Usage
   ### Starting `Logger`
