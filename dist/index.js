@@ -84,17 +84,17 @@ document.addEventListener('DOMContentLoaded', function () {
       var key = '';
       var words = this.responseText.split('\n');
       for (var i = 0; i < numberOfEntries; i++) {
-        var log = [];
+        var event = [];
         var data = {};
         var wordCount = Math.max(Math.floor(Math.random() * 30), 5);
         for (var j = 0; j < wordCount; j++) {
-          log.push(words[Math.floor(Math.random() * words.length)]);
+          event.push(words[Math.floor(Math.random() * words.length)]);
           if (Math.random() > 0.8) {
             key = words[Math.floor(Math.random() * words.length)];
             data[key] = Math.random() > 0.5 ? Math.random() : key;
           }
         }
-        MayoLog.log(log.join(' '), data);
+        MayoLog.log(event.join(' '), data);
       }
 
       MayoLog.toConsole();
@@ -135,6 +135,8 @@ var _makeXHR = __webpack_require__(4);
 
 var _makeXHR2 = _interopRequireDefault(_makeXHR);
 
+var _printToConsole = __webpack_require__(5);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -149,93 +151,48 @@ var Logger = function () {
 
   _createClass(Logger, [{
     key: 'log',
-    value: function log() {
-      var _log = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'Unknown entry';
-
-      var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
+    value: function log(event, data) {
       var time = new Date() - this.startTime;
-      var logEntry = { time: time, log: _log, data: data };
+      var logEntry = { time: time, event: event, data: data };
 
-      this.logEntries.push(logEntry);
-      return logEntry;
+      return this.logEntries.push(logEntry);
     }
   }, {
     key: 'toConsole',
     value: function toConsole() {
       var logEntries = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.logEntries;
 
-      var parsedLogEntries = this.parseLogEntries(logEntries);
-
-      this.printHeader('=-=-=-=-= Logger! =-=-=-=-=');
-      this.printToConsole(parsedLogEntries);
-      return parsedLogEntries;
+      return (0, _printToConsole.printToConsole)('=-=-= Logger! =-=-=', logEntries);
     }
   }, {
     key: 'findWithDataAttribute',
-    value: function findWithDataAttribute() {
-      var key = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-
-      var filteredEntries = this.logEntries.filter(function (_ref) {
+    value: function findWithDataAttribute(key) {
+      var logEntryHasKey = function logEntryHasKey(_ref) {
         var data = _ref.data;
         return (0, _hasKey2.default)(data, key);
-      });
-      var parsedLogEntries = this.parseLogEntries(filteredEntries);
+      };
+      var filteredLogEntries = this.logEntries.filter(logEntryHasKey);
 
-      this.printHeader('=-=-=- Search Result -=-=-=');
-      this.printToConsole(parsedLogEntries);
-      return filteredEntries;
+      (0, _printToConsole.printToConsole)('== Search Result ==', filteredLogEntries);
+      return filteredLogEntries;
     }
   }, {
     key: 'sendToServer',
-    value: function sendToServer() {
-      var _this = this;
-
-      var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-
-      var sendLog = (0, _chancify2.default)(_makeXHR2.default, 0.5);
+    value: function sendToServer(url) {
+      var sendLogEntries = (0, _chancify2.default)(_makeXHR2.default, 0.5);
       var options = {
         type: 'POST',
         url: url,
         data: this.logEntries,
         success: function success() {
-          return _this.printHeader('=-=-=- Log Submitted -=-=-=', 'lightgreen');
+          return (0, _printToConsole.printHeading)('== Log Submitted ==', 'lightgreen');
         },
         error: function error() {
-          return _this.printHeader('=-=-=- Submit Failed -=-=-=', 'red');
+          return (0, _printToConsole.printHeading)('== Submit Failed ==', 'red');
         }
       };
 
-      sendLog(options);
-    }
-  }, {
-    key: 'parseLogEntries',
-    value: function parseLogEntries() {
-      var logEntries = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-
-      return logEntries.map(function (_ref2, index) {
-        var time = _ref2.time,
-            log = _ref2.log,
-            data = _ref2.data;
-        return '[' + (index + 1) + '] (' + time + 'ms) ' + log + ' ' + JSON.stringify(data);
-      });
-    }
-  }, {
-    key: 'printToConsole',
-    value: function printToConsole() {
-      var parsedLogEntries = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-
-      parsedLogEntries.forEach(function (logEntry) {
-        return console.log(logEntry);
-      });
-    }
-  }, {
-    key: 'printHeader',
-    value: function printHeader() {
-      var text = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-      var color = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'cyan';
-
-      console.log('%c' + text, 'color: ' + color);
+      sendLogEntries(options);
     }
   }]);
 
@@ -280,7 +237,6 @@ var hasKey = function hasKey(object, targetKey) {
     if (_typeof(object[key]) === 'object') {
       objects.push(object[key]);
     }
-
     return objects;
   }, []);
 
@@ -329,7 +285,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-/* eslint-disable no-undef, no-console */
+/* eslint-disable no-undef */
 var makeXHR = function makeXHR() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
@@ -365,6 +321,50 @@ var makeXHR = function makeXHR() {
 };
 
 exports.default = makeXHR;
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/* eslint-disable no-console */
+var parseLogEntries = function parseLogEntries(logEntries) {
+  return logEntries.map(function (_ref, index) {
+    var time = _ref.time,
+        event = _ref.event,
+        data = _ref.data;
+    return '[' + (index + 1) + '] (' + time + 'ms) ' + event + ' ' + JSON.stringify(data);
+  });
+};
+
+var printHeading = function printHeading(text) {
+  var color = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'cyan';
+
+  console.log('%c' + text, 'color: ' + color);
+};
+
+var printLogEntries = function printLogEntries(parsedLogEntries) {
+  parsedLogEntries.forEach(function (logEntry) {
+    return console.log(logEntry);
+  });
+};
+
+var printToConsole = function printToConsole(heading, logEntries) {
+  var parsedLogEntries = parseLogEntries(logEntries);
+
+  printHeading(heading);
+  printLogEntries(parsedLogEntries);
+
+  return parsedLogEntries;
+};
+
+exports.printToConsole = printToConsole;
+exports.printHeading = printHeading;
 
 /***/ })
 /******/ ]);
