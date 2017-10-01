@@ -185,7 +185,7 @@ var Logger = function () {
         url: url,
         data: this.logEntries,
         success: function success() {
-          return (0, _printToConsole.printHeading)('== Log Submitted ==', 'lightgreen');
+          return (0, _printToConsole.printHeading)('== Log Submitted ==', 'green');
         },
         error: function error() {
           return (0, _printToConsole.printHeading)('== Submit Failed ==', 'red');
@@ -343,7 +343,7 @@ var parseLogEntries = function parseLogEntries(logEntries) {
 };
 
 var printHeading = function printHeading(text) {
-  var color = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'cyan';
+  var color = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'blue';
 
   console.log('%c' + text, 'color: ' + color);
 };

@@ -4,7 +4,7 @@ const parseLogEntries = logEntries => (
     `[${index + 1}] (${time}ms) ${event} ${JSON.stringify(data)}`)
 )
 
-const printHeading = (text, color = 'cyan') => {
+const printHeading = (text, color = 'blue') => {
   console.log(`%c${text}`, `color: ${color}`)
 }
 

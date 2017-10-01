@@ -35,7 +35,7 @@ class Logger {
       type: 'POST',
       url,
       data: this.logEntries,
-      success: () => printHeading('== Log Submitted ==', 'lightgreen'),
+      success: () => printHeading('== Log Submitted ==', 'green'),
       error: () => printHeading('== Submit Failed ==', 'red'),
     }
 
