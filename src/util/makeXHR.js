@@ -1,4 +1,8 @@
 /* eslint-disable no-undef */
+
+// makeXHR() accepts an optiosns object and makes
+// an HTTP request.
+//
 const makeXHR = (options = {}) => {
   const defaults = {
     type: 'GET',
@@ -8,6 +12,10 @@ const makeXHR = (options = {}) => {
     error: () => {},
   }
 
+  // This is why I love ES6:  Merge objects with
+  // the spread operators then destructure it.
+  // I find writing with ES6 such a pleasure.
+  // (Though not as much as Ruby - so beautiful).
   const {
     type,
     url,
