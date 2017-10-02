@@ -1,5 +1,5 @@
 // hasKey() checks if the supplied object contains the
-// target key. The key may be nested under many layers.
+// target key. The key may be nested many levels deep.
 // The below algorithm utilizses a recursive depth-frist
 // search algorthm to conduct a deep object search.
 
@@ -27,7 +27,7 @@ const hasKey = (object, targetKey) => {
   }, [])
 
   // Recursively call hasKey on each child.  If one of the
-  // calls returns true, the result returns to the next call
+  // calls returns true, the result returns to the previous call
   // stack until it sinks all the way down to the original call.
   for (const child of children) {
     if (hasKey(child, targetKey)) {

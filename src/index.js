@@ -24,9 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       MayoLog.toConsole();
-
-      // Small changes were made in the above code in order to
-      // store a key when the log entries are generated
       MayoLog.findWithDataAttribute(key);
 
       // In this demo, httpbin.org is utilized for XHR
