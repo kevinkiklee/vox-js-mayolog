@@ -119,6 +119,11 @@ The following tests are conducted:
 ✓ findWithDataAttribute() finds deeply nested key in the object
 ```
 
+## Development Notes
+* I used Webpack for this project.  I wanted the convenience of using ES6, but I also wanted to provide better browser compatibility.
+* I wanted the Logger class to only contain public methods, so I abstracted out all private methods into a separate module.
+* I was thinking about the edge case where the target key may be nested inside.  So, I used a recursive depth-first search algorithm.  I used TDD for this, and I wrote the test cases out first, which was immensely helpful.
+
 ## Future Implementations
 - [ ] Test `sendToServer()`.
 - [ ] Return a `Promise` from `makeXHR()`.
